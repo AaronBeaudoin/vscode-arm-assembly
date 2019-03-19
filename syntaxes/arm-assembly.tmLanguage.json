@@ -10,8 +10,30 @@
     }
   ],
   "repository": {
+    "comment": {
+      "patterns": [
+        {
+          "include": "#comment-singleline"
+        },
+        {
+          "include": "#comment-multiline"
+        }
+      ]
+    },
+    "comment-singleline": {
+      "match": "(?:(?:@|\\/\\/)[^\\n]*)",
+      "name": "comment.armassem"
+    },
+    "comment-multiline": {
+      "begin": "(?:/\\*)",
+      "end": "(?:\\*/)",
+      "name": "comment.armassem"
+    },
     "literal": {
       "patterns": [
+        {
+          "include": "#comment"
+        },
         {
           "include": "#string-multiquote"
         },
@@ -41,7 +63,7 @@
       "name": "string.armassem"
     },
     "label-immediate": {
-      "match": "(?:=([^\\n\\t \"',\\]\\}]+))",
+      "match": "(?:=((?:\\\\@|(?!\\/\\/|\\/\\*)[^\\n\\t \"',\\]\\}@])+))",
       "captures": {
         "1": {
           "name": "variable.armassem"
@@ -49,38 +71,22 @@
       }
     },
     "register": {
-      "match": "(?:r[0-9]+|sp|lr|pc|apsr|cpsr)",
+      "match": "(?i)(?:r[0-9]+|sp|lr|pc|apsr|cpsr)",
       "name": "storage.armassem"
     },
     "numeric-immediate": {
-      "match": "(?:(?:#|=)[0-9A-Za-z-]+)",
+      "match": "(?i)(?:(?:#|=)[0-9a-z-]+)",
       "name": "constant.armassem"
     },
     "numeric-simple": {
       "match": "(?:[0-9]+)",
       "name": "constant.armassem"
     },
-    "comment": {
-      "patterns": [
-        {
-          "include": "#comment-singleline"
-        },
-        {
-          "include": "#comment-multiline"
-        }
-      ]
-    },
-    "comment-singleline": {
-      "match": "(?:@[^\\n]*)",
-      "name": "comment.armassem"
-    },
-    "comment-multiline": {
-      "begin": "(?:[\\t ]*/\\*)",
-      "end": "(?:\\*/)",
-      "name": "comment.armassem"
-    },
     "line": {
       "patterns": [
+        {
+          "include": "#comment"
+        },
         {
           "include": "#line-label"
         },
@@ -90,7 +96,7 @@
       ]
     },
     "line-label": {
-      "match": "(?:([^\\n\\t :]+):)(?:[\\t ]*((?:\\\\@|[^\\n@])+))?",
+      "match": "(?:([^\\n\\t :]+):)(?:[\\t ]([^\\n]+))?",
       "captures": {
         "1": {
           "name": "variable.armassem"
@@ -105,7 +111,7 @@
       }
     },
     "line-simple": {
-      "match": "(?:[\\t ]*((?:\\\\@|[^\\n@])+))",
+      "match": "(?:[\\t ]*([^\\n]+))",
       "captures": {
         "1": {
           "patterns": [
@@ -118,6 +124,9 @@
     },
     "statement": {
       "patterns": [
+        {
+          "include": "#comment"
+        },
         {
           "include": "#directive"
         },
@@ -140,7 +149,7 @@
       ]
     },
     "directive-label": {
-      "match": "(?:\\.(global)[\\t ]+([^\\n\\t ]+))",
+      "match": "(?i)(?:\\.(global)[\\t ]+([^\\n\\t ]+))",
       "captures": {
         "1": {
           "name": "keyword.armassem"
@@ -151,7 +160,7 @@
       }
     },
     "directive-macro": {
-      "match": "(?:\\.(macro)[\\t ]+([^\\n\\t ]+)([\\t ]+[^\\n\\t ]+)?)",
+      "match": "(?i)(?:\\.(macro)[\\t ]+([^\\n\\t ]+)([\\t ]+[^\\n]+)?)",
       "captures": {
         "1": {
           "name": "keyword.armassem"
@@ -194,7 +203,7 @@
       ]
     },
     "instruction-label": {
-      "match": "(?:(b[^fik][^\\n\\t ]*|b)[\\t ]+([^\\n\\t ]+))",
+      "match": "(?i)(?:(b[^fik][^\\n\\t ]*|b)[\\t ]+([^\\n\\t ]+))",
       "captures": {
         "1": {
           "name": "entity.name.tag.armassem"

@@ -4,8 +4,20 @@ patterns:
 - {include: "#comment"}
 - {include: "#line"}
 repository:
+  comment:
+    patterns:
+    - {include: "#comment-singleline"}
+    - {include: "#comment-multiline"}
+  comment-singleline:
+    match: (?:(?:@|\/\/)[^\n]*)
+    name: comment.armassem
+  comment-multiline:
+    begin: (?:/\*)
+    end: (?:\*/)
+    name: comment.armassem
   literal:
     patterns:
+    - {include: "#comment"}
     - {include: "#string-multiquote"}
     - {include: "#string-singlequote"}
     - {include: "#label-immediate"}
@@ -19,44 +31,35 @@ repository:
     match: (?:'(?:\\'|[^'])*')
     name: string.armassem
   label-immediate:
-    match: (?:=([^\n\t "',\]\}]+))
+    match: (?:=((?:\\@|(?!\/\/|\/\*)[^\n\t "',\]\}@])+))
     captures:
       1: {name: variable.armassem}
   register:
-    match: (?:r[0-9]+|sp|lr|pc|apsr|cpsr)
+    match: (?i)(?:r[0-9]+|sp|lr|pc|apsr|cpsr)
     name: storage.armassem
   numeric-immediate:
-    match: (?:(?:#|=)[0-9A-Za-z-]+)
+    match: (?i)(?:(?:#|=)[0-9a-z-]+)
     name: constant.armassem
   numeric-simple:
     match: (?:[0-9]+)
     name: constant.armassem
-  comment:
-    patterns:
-    - {include: "#comment-singleline"}
-    - {include: "#comment-multiline"}
-  comment-singleline:
-    match: (?:@[^\n]*)
-    name: comment.armassem
-  comment-multiline:
-    begin: (?:[\t ]*/\*)
-    end: (?:\*/)
-    name: comment.armassem
   line:
     patterns:
+    - {include: "#comment"}
     - {include: "#line-label"}
     - {include: "#line-simple"}
   line-label:
-    match: (?:([^\n\t :]+):)(?:[\t ]*((?:\\@|[^\n@])+))?
+    match: (?:([^\n\t :]+):)(?:[\t ]([^\n]+))?
     captures:
       1: {name: variable.armassem}
       2: {patterns: [{include: "#statement"}]}
   line-simple:
-    match: (?:[\t ]*((?:\\@|[^\n@])+))
+    match: (?:[\t ]*([^\n]+))
     captures:
       1: {patterns: [{include: "#statement"}]}
   statement:
     patterns:
+    - {include: "#comment"}
     - {include: "#directive"}
     - {include: "#instruction"}
   directive:
@@ -65,12 +68,12 @@ repository:
     - {include: "#directive-macro"}
     - {include: "#directive-generic"}
   directive-label:
-    match: (?:\.(global)[\t ]+([^\n\t ]+))
+    match: (?i)(?:\.(global)[\t ]+([^\n\t ]+))
     captures:
       1: {name: keyword.armassem}
       2: {name: variable.armassem}
   directive-macro:
-    match: (?:\.(macro)[\t ]+([^\n\t ]+)([\t ]+[^\n\t ]+)?)
+    match: (?i)(?:\.(macro)[\t ]+([^\n\t ]+)([\t ]+[^\n]+)?)
     captures:
       1: {name: keyword.armassem}
       2: {name: entity.name.tag.armassem}
@@ -85,7 +88,7 @@ repository:
     - {include: "#instruction-label"}
     - {include: "#instruction-generic"}
   instruction-label:
-    match: (?:(b[^fik][^\n\t ]*|b)[\t ]+([^\n\t ]+))
+    match: (?i)(?:(b[^fik][^\n\t ]*|b)[\t ]+([^\n\t ]+))
     captures:
       1: {name: entity.name.tag.armassem}
       2: {name: variable.armassem}
