@@ -1,0 +1,223 @@
+{
+  "scopeName": "source.armassem",
+  "name": "ARM Assembly",
+  "patterns": [
+    {
+      "include": "#comment"
+    },
+    {
+      "include": "#line"
+    }
+  ],
+  "repository": {
+    "literal": {
+      "patterns": [
+        {
+          "include": "#string-multiquote"
+        },
+        {
+          "include": "#string-singlequote"
+        },
+        {
+          "include": "#label-immediate"
+        },
+        {
+          "include": "#register"
+        },
+        {
+          "include": "#numeric-immediate"
+        },
+        {
+          "include": "#numeric-simple"
+        }
+      ]
+    },
+    "string-multiquote": {
+      "match": "(?:\"(?:\\\\\"|[^\"])*\")",
+      "name": "string.armassem"
+    },
+    "string-singlequote": {
+      "match": "(?:'(?:\\\\'|[^'])*')",
+      "name": "string.armassem"
+    },
+    "label-immediate": {
+      "match": "(?:=([^\\n\\t \"',\\]\\}]+))",
+      "captures": {
+        "1": {
+          "name": "variable.armassem"
+        }
+      }
+    },
+    "register": {
+      "match": "(?:r[0-9]+|sp|lr|pc|apsr|cpsr)",
+      "name": "storage.armassem"
+    },
+    "numeric-immediate": {
+      "match": "(?:(?:#|=)[0-9A-Za-z-]+)",
+      "name": "constant.armassem"
+    },
+    "numeric-simple": {
+      "match": "(?:[0-9]+)",
+      "name": "constant.armassem"
+    },
+    "comment": {
+      "patterns": [
+        {
+          "include": "#comment-singleline"
+        },
+        {
+          "include": "#comment-multiline"
+        }
+      ]
+    },
+    "comment-singleline": {
+      "match": "(?:@[^\\n]*)",
+      "name": "comment.armassem"
+    },
+    "comment-multiline": {
+      "begin": "(?:[\\t ]*/\\*)",
+      "end": "(?:\\*/)",
+      "name": "comment.armassem"
+    },
+    "line": {
+      "patterns": [
+        {
+          "include": "#line-label"
+        },
+        {
+          "include": "#line-simple"
+        }
+      ]
+    },
+    "line-label": {
+      "match": "(?:([^\\n\\t :]+):)(?:[\\t ]*((?:\\\\@|[^\\n@])+))?",
+      "captures": {
+        "1": {
+          "name": "variable.armassem"
+        },
+        "2": {
+          "patterns": [
+            {
+              "include": "#statement"
+            }
+          ]
+        }
+      }
+    },
+    "line-simple": {
+      "match": "(?:[\\t ]*((?:\\\\@|[^\\n@])+))",
+      "captures": {
+        "1": {
+          "patterns": [
+            {
+              "include": "#statement"
+            }
+          ]
+        }
+      }
+    },
+    "statement": {
+      "patterns": [
+        {
+          "include": "#directive"
+        },
+        {
+          "include": "#instruction"
+        }
+      ]
+    },
+    "directive": {
+      "patterns": [
+        {
+          "include": "#directive-label"
+        },
+        {
+          "include": "#directive-macro"
+        },
+        {
+          "include": "#directive-generic"
+        }
+      ]
+    },
+    "directive-label": {
+      "match": "(?:\\.(global)[\\t ]+([^\\n\\t ]+))",
+      "captures": {
+        "1": {
+          "name": "keyword.armassem"
+        },
+        "2": {
+          "name": "variable.armassem"
+        }
+      }
+    },
+    "directive-macro": {
+      "match": "(?:\\.(macro)[\\t ]+([^\\n\\t ]+)([\\t ]+[^\\n\\t ]+)?)",
+      "captures": {
+        "1": {
+          "name": "keyword.armassem"
+        },
+        "2": {
+          "name": "entity.name.tag.armassem"
+        },
+        "3": {
+          "patterns": [
+            {
+              "include": "#literal"
+            }
+          ]
+        }
+      }
+    },
+    "directive-generic": {
+      "match": "(?:\\.([^\\n\\t ]+)([^\\n]*))",
+      "captures": {
+        "1": {
+          "name": "keyword.armassem"
+        },
+        "2": {
+          "patterns": [
+            {
+              "include": "#literal"
+            }
+          ]
+        }
+      }
+    },
+    "instruction": {
+      "patterns": [
+        {
+          "include": "#instruction-label"
+        },
+        {
+          "include": "#instruction-generic"
+        }
+      ]
+    },
+    "instruction-label": {
+      "match": "(?:(b[^fik][^\\n\\t ]*|b)[\\t ]+([^\\n\\t ]+))",
+      "captures": {
+        "1": {
+          "name": "entity.name.tag.armassem"
+        },
+        "2": {
+          "name": "variable.armassem"
+        }
+      }
+    },
+    "instruction-generic": {
+      "match": "(?:([^\\n\\t ]+)([^\\n]*))",
+      "captures": {
+        "1": {
+          "name": "entity.name.tag.armassem"
+        },
+        "2": {
+          "patterns": [
+            {
+              "include": "#literal"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

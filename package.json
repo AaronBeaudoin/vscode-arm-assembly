@@ -1,0 +1,25 @@
+{
+    "name": "arm-assembly",
+    "displayName": "arm-assembly",
+    "description": "",
+    "version": "0.0.1",
+    "engines": {
+        "vscode": "^1.32.0"
+    },
+    "categories": [
+        "Programming Languages"
+    ],
+    "contributes": {
+        "languages": [{
+            "id": "arm-assembly",
+            "aliases": ["ARM Assembly", "arm-assembly"],
+            "extensions": [".s", ".S", ".i", ".asm"],
+            "configuration": "./language-configuration.json"
+        }],
+        "grammars": [{
+            "language": "arm-assembly",
+            "scopeName": "source.armassem",
+            "path": "./syntaxes/arm-assembly.tmLanguage.json"
+        }]
+    }
+}
