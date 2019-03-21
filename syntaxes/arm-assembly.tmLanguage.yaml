@@ -20,27 +20,27 @@ repository:
     - {include: "#comment"}
     - {include: "#string-multiquote"}
     - {include: "#string-singlequote"}
-    - {include: "#label-immediate"}
+    - {include: "#immediate-numeric"}
+    - {include: "#immediate-label"}
     - {include: "#register"}
-    - {include: "#numeric-immediate"}
-    - {include: "#numeric-simple"}
+    - {include: "#numeric"}
   string-multiquote:
     match: (?:"(?:\\"|[^"])*")
     name: string.armassem
   string-singlequote:
     match: (?:'(?:\\'|[^'])*')
     name: string.armassem
-  label-immediate:
-    match: (?:=((?:\\@|(?!\/\/|\/\*)[^\n\t "',\]\}@])+))
+  immediate-numeric:
+    match: (?i)(?:(?:#|=)-?(?:0x[0-9a-f]+|0b[01]+|[0-9]+))
+    name: constant.armassem
+  immediate-label:
+    match: (?:(?:#|=)((?:\\@|(?!\/\/|\/\*)[^\n\t "',\]\}@])+))
     captures:
       1: {name: variable.armassem}
   register:
     match: (?i)(?:r[0-9]+|sp|lr|pc|apsr|cpsr)
     name: storage.armassem
-  numeric-immediate:
-    match: (?i)(?:(?:#|=)[0-9a-z-]+)
-    name: constant.armassem
-  numeric-simple:
+  numeric:
     match: (?:[0-9]+)
     name: constant.armassem
   line:
