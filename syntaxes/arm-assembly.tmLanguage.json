@@ -75,7 +75,7 @@
       }
     },
     "register": {
-      "match": "(?i)(?:r[0-9]+|sp|lr|pc|apsr|cpsr)",
+      "match": "(?i)(?:^|[^a-z])(?:r[0-9]+|sp|lr|pc|apsr|cpsr)(?:$|[^a-z])",
       "name": "storage.armassem"
     },
     "numeric": {

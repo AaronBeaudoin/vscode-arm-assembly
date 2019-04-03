@@ -38,7 +38,7 @@ repository:
     captures:
       1: {name: variable.armassem}
   register:
-    match: (?i)(?:r[0-9]+|sp|lr|pc|apsr|cpsr)
+    match: (?i)(?:^|[^a-z])(?:r[0-9]+|sp|lr|pc|apsr|cpsr)(?:$|[^a-z])
     name: storage.armassem
   numeric:
     match: (?:[0-9]+)

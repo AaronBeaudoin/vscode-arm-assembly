@@ -10,6 +10,6 @@ main:		stmfd sp!, {lr}
 		return =main
 		.amazing
 		bl wow
-ok:		.wow cool
+ok:		.wow cool, sp
 test:		noice
 		.noice wow
